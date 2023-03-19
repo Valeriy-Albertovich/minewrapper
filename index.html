@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="src/script.js" defer></script>
+  <title>Aged Minewrapper</title>
+</head>
+<body>
+
+<div id="js-frame-panel" class="frame-panel">
+  
+  <div id="js-frame-panel-status" class="frame-panel__status">
+    <div class="statusbar">
+      <div class="statusbar__minescount">
+        <span id="js-statusminescount-hundredths" class="statusbar__number" data-value="0"></span>
+        <span id="js-statusminescount-tenths" class="statusbar__number" data-value="1"></span>
+        <span id="js-statusminescount-units" class="statusbar__number" data-value="0"></span>
+      </div>
+
+      <div id="js-statusbar-smile" class="statusbar__smile statusbar__smiledown">
+        <span id="js-statusbar-smilesvg" class="statusbar__smilenice" onmousedown="smileButtonMouseDown(event)" onmouseup="smileButtonMouseUp()" onmouseout="smileButtonMouseUp()"></span>
+      </div>
+
+      <div class="statusbar__time">
+        <span id="js-statusbartime-hundredths" class="statusbar__number" data-value="0"></span>
+        <span id="js-statusbartime-tenths" class="statusbar__number" data-value="0"></span>
+        <span id="js-statusbartime-units" class="statusbar__number" data-value="0"></span>
+      </div>
+    </div>    
+  </div>
+
+  <div id="js-frame-panel-difficult" class="frame-panel__difficult"> 
+    <button id="js-button-difficult-easy" onclick="changeDifficult('easy')">Easy</button>
+    <button id="js-button-difficult-medium" onclick="changeDifficult('medium')">Medium</button>
+    <button id="js-button-difficult-hard" onclick="changeDifficult('hard')">Hard</button>
+  </div>
+
+  <div id="js-frame-panel-gamespace" class="frame-panel__gamespace">
+    <div id="js-minefield" class="minefield">
+    </div>
+  </div>
+
+</div>
+
+<span class="minefield__cell-closed" data-image="question"></span>
+<span class="minefield__cell-open" data-image="number1"></span>
+
+</body>
+</html>
