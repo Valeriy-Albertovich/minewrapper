@@ -11,7 +11,6 @@
  * @property {number} heightArray
  */
 
-
 const gameGlobals = {
     currentDifficult: "easy",
     minesLeft: 10,
@@ -144,6 +143,17 @@ function openGroupDefaultCells (xpos, ypos) {
     }
 };
 
+
+function replaceMineView (x, y) {
+    const target = getElementById(String(x) + '-' + String(y));
+    if ((target.getAttribute('data-image') !== 'question') && (target.getAttribute('data-image') !== 'flag')) {
+        const dataValue = openCells(x, y);
+        target.classList.replace('minefield__cell-closed', 'minefield__cell-open');
+        target.setAttribute('data-image',dataValue);
+    }
+    
+};
+
 /**
  * opening empty areas
  * @param {any} arr game array
@@ -151,59 +161,50 @@ function openGroupDefaultCells (xpos, ypos) {
  * @param {number} height field height
  */
 function refreshMineField (arr, width, height) {
-    let cellClass;
     for (let i=0; i<width; i++) {
         for (let j=0; j<height; j++) {
             if (arr[i][j] == '-') {
 
-                getElementById(String(i) + '-' + String(j)).classList.replace('minefield__cell-default', 'minefield__cell-active')
+                replaceMineView(i, j);
 
                 if ((i-1 >=0) && (j-1 >=0)) {
                     if (Number.isInteger(arr[i-1][j-1])) {
-                        cellClass = openCells(i-1, j-1);
-                        getElementById(String(i-1) + '-' + String(j-1)).classList.replace('minefield__cell-default', cellClass);
+                        replaceMineView(i-1, j-1);
                     }
                 }
                 if (i-1 >=0) {
                     if (Number.isInteger(arr[i-1][j])) {
-                        cellClass = openCells(i-1, j);
-                        getElementById(String(i-1) + '-' + String(j)).classList.replace('minefield__cell-default', cellClass);
+                        replaceMineView(i-1, j);
                     }
                 }
                 if ((i-1 >=0) && (j+1 < height)) {
                     if (Number.isInteger(arr[i-1][j+1])) {
-                        cellClass = openCells(i-1, j+1);
-                        getElementById(String(i-1) + '-' + String(j+1)).classList.replace('minefield__cell-default', cellClass);
+                        replaceMineView(i-1, j+1);
                     }
                 }
                 if (j-1 >= 0) {
                     if (Number.isInteger(arr[i][j-1])) {
-                        cellClass = openCells(i, j-1);
-                        getElementById(String(i) + '-' + String(j-1)).classList.replace('minefield__cell-default', cellClass);
+                        replaceMineView(i, j-1);
                     }
                 }
                 if (j+1 < height) {
                     if (Number.isInteger(arr[i][j+1])) {
-                        cellClass = openCells(i, j+1);
-                        getElementById(String(i) + '-' + String(j+1)).classList.replace('minefield__cell-default', cellClass);
+                        replaceMineView(i, j+1);
                     }
                 }
                 if ((i+1 < width) && (j - 1 >= 0)) {
                     if (Number.isInteger(arr[i+1][j-1])) {
-                        cellClass = openCells(i+1, j-1);
-                        getElementById(String(i+1) + '-' + String(j-1)).classList.replace('minefield__cell-default', cellClass);
+                        replaceMineView(i+1, j-1);
                     }
                 }    
                 if (i+1 < width) {
                     if (Number.isInteger(arr[i+1][j])) {
-                        cellClass = openCells(i+1, j);
-                        getElementById(String(i+1) + '-' + String(j)).classList.replace('minefield__cell-default', cellClass);
+                        replaceMineView(i+1, j);
                     }
                 }
                 if ((i+1 < width)  && (j + 1 < height)) {
                     if (Number.isInteger(arr[i+1][j+1])) {
-                        cellClass = openCells(i+1, j+1);
-                        getElementById(String(i+1) + '-' + String(j+1)).classList.replace('minefield__cell-default', cellClass);
+                        replaceMineView(i+1, j+1);
                     }
                 }
             }
@@ -221,7 +222,7 @@ function isGameWin () {
     for (let i=0; i<gameGlobals.widthArray; i++) {
         for (let j=0; j<gameGlobals.heightArray; j++) {
             cellClass = getElementById(String(i) + '-' + String(j)).classList[0];
-            if ((cellClass === 'minefield__cell-default') || (cellClass === 'minefield__cell-flag') || (cellClass === 'minefield__cell-question')) {
+            if (cellClass === 'minefield__cell-closed') {
                 cellsLeft ++;
                 if (cellsLeft > gameGlobals.minesNumber) {
                     return 'game is not over';
@@ -253,17 +254,22 @@ function endGame () {
     for (let i=0; i<gameGlobals.widthArray; i++) {
         for (let j=0; j<gameGlobals.heightArray; j++) {
             let cell = getElementById(i + '-' + j);
+            let dataValue = cell.getAttribute('data-image');
 
-            if ((cell.classList[0] == 'minefield__cell-default') && (gameGlobals.gameArray[i][j] == 'x')) {
-                cell.classList.replace('minefield__cell-default', 'minefield__cell-mine');
-            }
+            if (dataValue !== 'question') {
+                if ((cell.classList[0] == 'minefield__cell-closed') && (gameGlobals.gameArray[i][j] == 'x') && (dataValue != 'flag')) {
+                    cell.classList.replace('minefield__cell-closed', 'minefield__cell-open');
+                    cell.setAttribute('data-image', 'mine');
+                }
 
-            if ((cell.classList[0] == 'minefield__cell-flag') && (gameGlobals.gameArray[i][j] != 'x')) {
-                cell.classList.replace('minefield__cell-flag', 'minefield__cell-minex');
-            }
+                if ((dataValue == 'flag') && (gameGlobals.gameArray[i][j] != 'x')) {
+                    cell.setAttribute('data-image', 'minex');
+                }
 
-            if (cell.classList[0] == 'minefield__cell-default') {
-                cell.classList.replace('minefield__cell-default', openCells(i, j));
+                if ((cell.classList[0] == 'minefield__cell-closed') && (dataValue == 'none')) {
+                    cell.classList.replace('minefield__cell-closed', 'minefield__cell-open');
+                    cell.setAttribute('data-image', openCells(i, j));
+                }
             }
         }
     }
@@ -276,40 +282,40 @@ function endGame () {
  * @returns new class of cell
  */
 function openCells (xpos, ypos) {
-    let classCell = '';
+    let dataValue = '';
     switch (gameGlobals.gameArray[xpos][ypos]) {
         case 0:
-            classCell = 'minefield__cell-active';
+            dataValue = 'none';
             break;
         case '-':
-            classCell = 'minefield__cell-active';
+            dataValue = 'none';
             break;
         case 1:
-            classCell = 'minefield__cell-1';
+            dataValue = 'number1';
             break;
         case 2:
-            classCell = 'minefield__cell-2';
+            dataValue = 'number2';
             break;
         case 3:
-            classCell = 'minefield__cell-3';
+            dataValue = 'number3';
             break;
         case 4:
-            classCell = 'minefield__cell-4';
+            dataValue = 'number4';
             break;
         case 5:
-            classCell = 'minefield__cell-5';
+            dataValue = 'number5';
             break;
         case 6:
-            classCell = 'minefield__cell-6';
+            dataValue = 'number6';
             break;
         case 7:
-            classCell = 'minefield__cell-7';
+            dataValue = 'number7';
             break;
         case 'x':
-            classCell = 'minefield__cell-boom';
+            dataValue = 'mine';
             break;
     }
-    return classCell;
+    return dataValue;
 };
 
 /**
@@ -319,24 +325,25 @@ function openCells (xpos, ypos) {
 minefield.onclick = function(event) {
     let target = event.target; 
     let idCell
-    let classCell
+    let dataValue
 
-    if ((target.tagName == 'SPAN') && (gameGlobals.isOver == false) && (target.classList[0] == 'minefield__cell-default')) {
+    if ((target.tagName == 'SPAN') && (gameGlobals.isOver == false) && (target.getAttribute("data-image") == 'none')) {
         if (gameGlobals.gameStatus == false) {
             idCell = target.id.split('-').map(Number);
-            //idCell = idCell.map(Number);
-            gameGlobals.gameArray = createArray(gameGlobals.gameArray, idCell[0], idCell[1], gameGlobals.widthArray, gameGlobals.heightArray, gameGlobals.minesLeft);
+            gameGlobals.gameArray = createArray(gameGlobals.gameArray, idCell[0], idCell[1], gameGlobals.widthArray, gameGlobals.heightArray, gameGlobals.minesNumber);
             gameGlobals.gameStatus = true;
             intervalTime = setInterval(timer, 1000);
         }
 
         idCell = target.id.split('-');
-        classCell = openCells(idCell[0], idCell[1]);
-        target.classList.replace('minefield__cell-default', classCell);
+        dataValue = openCells(idCell[0], idCell[1]);
+        target.classList.replace('minefield__cell-closed', 'minefield__cell-open');
+        target.setAttribute("data-image", dataValue);
+
         isGameWin();
 
         idCell = idCell.map(Number);
-        if (classCell == 'minefield__cell-active') {
+        if (dataValue == 'none') {
             gameGlobals.gameArray[idCell[0]][idCell[1]] = '-';
             openGroupDefaultCells(idCell[0], idCell[1]);
             refreshMineField(gameGlobals.gameArray, gameGlobals.widthArray, gameGlobals.heightArray);
@@ -344,7 +351,8 @@ minefield.onclick = function(event) {
 
         printArray(gameGlobals.gameArray, gameGlobals.widthArray, gameGlobals.heightArray);
 
-        if (classCell == 'minefield__cell-boom') {
+        if (dataValue == 'mine') {
+            target.classList.replace('minefield__cell-open', 'minefield__cell-boom');
             endGame();
         }
     } 
@@ -359,19 +367,22 @@ minefield.oncontextmenu = function(event) {
     event.preventDefault();
 
     const target = event.target; 
+    if (target === null) {
+        return
+    }
 
-    if ((target.tagName == 'SPAN') && (gameGlobals.isOver == false)) {
-        switch (target.classList[0]) {
-            case 'minefield__cell-question':
-                target.classList.replace('minefield__cell-question', 'minefield__cell-default');
+    if ((target.tagName == 'SPAN') && (gameGlobals.isOver == false) && (target.classList[0] === 'minefield__cell-closed')) {
+        switch (target.getAttribute('data-image')) {  
+            case 'question':
+                target.setAttribute("data-image", "none");
                 break
-            case 'minefield__cell-flag':
+            case 'flag':
                 gameGlobals.minesLeft ++;
-                target.classList.replace('minefield__cell-flag', 'minefield__cell-question');
+                target.setAttribute("data-image", "question");
                 break
-            case 'minefield__cell-default':
+            case 'none':
                 gameGlobals.minesLeft --;
-                target.classList.replace('minefield__cell-default', 'minefield__cell-flag');
+                target.setAttribute("data-image", "flag");
                 break
             default:
                 console.log('default');
@@ -387,15 +398,15 @@ minefield.oncontextmenu = function(event) {
 function refreshStatusNumbers (flagStatus) {
     if (flagStatus) {
         let numbersClasses = numberDivide(gameGlobals.timeSec);
-        secUnits.setAttribute("data-value", numbersClasses[0])
-        secTenths.setAttribute("data-value", numbersClasses[1])
-        secHundredths.setAttribute("data-value", numbersClasses[2])
+        secUnits.setAttribute("data-value", numbersClasses[0]);
+        secTenths.setAttribute("data-value", numbersClasses[1]);
+        secHundredths.setAttribute("data-value", numbersClasses[2]);
     }
     if ((gameGlobals.minesLeft >=0) && (flagStatus == false)){
         let numbersClasses = numberDivide(gameGlobals.minesLeft);
-        mineUnits.setAttribute("data-value", numbersClasses[0])
-        mineTenths.setAttribute("data-value", numbersClasses[1])
-        mineHundredths.setAttribute("data-value", numbersClasses[2])
+        mineUnits.setAttribute("data-value", numbersClasses[0]);
+        mineTenths.setAttribute("data-value", numbersClasses[1]);
+        mineHundredths.setAttribute("data-value", numbersClasses[2]);
     }
 };
 
@@ -437,8 +448,8 @@ function spawnMinefieldCells(fieldWidth, fieldHeight) {
     for (let i = 0; i < fieldWidth; i++) {
         for (let j = 0; j < fieldHeight; j++) {
             let span = document.createElement('span');
-            span.className = 'minefield__cell-default';
-            span.dataset.type = 'mine-size';
+            span.className = 'minefield__cell-closed';
+            span.dataset.image = 'none';
             span.id = i + '-' + j;
             minefield.appendChild(span);
         }
@@ -564,7 +575,7 @@ function smileButtonMouseUp() {
  * @param {number} startPositionY y-position of first clicked cell
  * @param {number} width field width
  * @param {number} height field height
- * @returns {}
+ * @returns
  */
 function createArray (arr, startPositionX, startPositionY, width, height, minesCount) {
     //initialization with zero's
@@ -676,29 +687,29 @@ function pidor (target, y, ymax) {
 changeDifficult (gameGlobals.currentDifficult);
 startGame();
 
-setInterval(function(){
-    let position = 0;
-    const potolok = randomInteger(0, 1000);
-	let span = document.createElement('span');
-    span.className = 'd1';
-    span.style.top = position + 'px';
-    span.style.left = potolok + 'px';
-    span.style.backgroundColor = '#' + (Math.random().toString(16) + '000000').substring(2,8).toUpperCase();
-    const intervalId = setInterval(() => {
-        if (position < potolok) {
-            position += 5;
-            span.style.top = position + 'px';   
-            console.log(position);
-        } else {
-            document.body.removeChild(span);
-            clearInterval(intervalId);
-        }
+// setInterval(function(){
+//     let position = 0;
+//     const potolok = randomInteger(0, 1000);
+// 	let span = document.createElement('span');
+//     span.className = 'd1';
+//     span.style.top = position + 'px';
+//     span.style.left = potolok + 'px';
+//     span.style.backgroundColor = '#' + (Math.random().toString(16) + '000000').substring(2,8).toUpperCase();
+//     const intervalId = setInterval(() => {
+//         if (position < potolok) {
+//             position += 5;
+//             span.style.top = position + 'px';   
+//             console.log(position);
+//         } else {
+//             document.body.removeChild(span);
+//             clearInterval(intervalId);
+//         }
         
-    }, 100);
-    //pidor(span, 0, randomInteger(700, 1000));
-    document.body.appendChild(span);
+//     }, 100);
+//     //pidor(span, 0, randomInteger(700, 1000));
+//     document.body.appendChild(span);
 
-}, randomInteger(100, 1000))
+// }, randomInteger(100, 1000))
 
 // for (let i = 0; i < 10; i++) {
 //     let span = document.createElement('span');
