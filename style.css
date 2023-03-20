@@ -52,37 +52,37 @@ body {
 }
 
 [data-image="question"] {
-	background-image: url(/assets/svg/status-panel/mines/New/question.svg);
+	background-image: url(./assets/svg/status-panel/mines/New/question.svg);
 }
 [data-image="flag"] {
-	background-image: url(/assets/svg/status-panel/mines/New/flag.svg);
+	background-image: url(./assets/svg/status-panel/mines/New/flag.svg);
 }
 [data-image="minex"] {
-	background-image: url(/assets/svg/status-panel/mines/New/mine-x.svg);
+	background-image: url(./assets/svg/status-panel/mines/New/mine-x.svg);
 }
 [data-image="mine"] {
-	background-image: url(/assets/svg/status-panel/mines/New/mine.svg);
+	background-image: url(./assets/svg/status-panel/mines/New/mine.svg);
 }
 [data-image="number1"] {
-	background-image: url(/assets/svg/status-panel/mines/New/1.svg);
+	background-image: url(./assets/svg/status-panel/mines/New/1.svg);
 }
 [data-image="number2"] {
-	background-image: url(/assets/svg/status-panel/mines/New/2.svg);
+	background-image: url(./assets/svg/status-panel/mines/New/2.svg);
 }
 [data-image="number3"] {
-	background-image: url(/assets/svg/status-panel/mines/New/3.svg);
+	background-image: url(./assets/svg/status-panel/mines/New/3.svg);
 }
 [data-image="number4"] {
-	background-image: url(/assets/svg/status-panel/mines/New/4.svg);
+	background-image: url(./assets/svg/status-panel/mines/New/4.svg);
 }
 [data-image="number5"] {
-	background-image: url(/assets/svg/status-panel/mines/New/5.svg);
+	background-image: url(./assets/svg/status-panel/mines/New/5.svg);
 }
 [data-image="number6"] {
-	background-image: url(/assets/svg/status-panel/mines/New/6.svg);
+	background-image: url(./assets/svg/status-panel/mines/New/6.svg);
 }
 [data-image="number7"] {
-	background-image: url(/assets/svg/status-panel/mines/New/7.svg);
+	background-image: url(./assets/svg/status-panel/mines/New/7.svg);
 }
 
 .statusbar {
@@ -114,21 +114,21 @@ body {
 	width: 37px;
 	height: 37px;
 	background-size: 37px;
-	background-image: url(/assets/svg/status-panel/face/faceSad.svg);
+	background-image: url(./assets/svg/status-panel/face/faceSad.svg);
 }
 
 .statusbar__smilenice {
 	width: 37px;
 	height: 37px;
 	background-size: 37px;
-	background-image: url(/assets/svg/status-panel/face/faceNice.svg);
+	background-image: url(./assets/svg/status-panel/face/faceNice.svg);
 }
 
 .statusbar__smilewin {
 	width: 37px;
 	height: 37px;
 	background-size: 37px;
-	background-image: url(/assets/svg/status-panel/face/faceWin.svg);
+	background-image: url(./assets/svg/status-panel/face/faceWin.svg);
 }
 
 
@@ -145,34 +145,34 @@ body {
 }
 
 .statusbar__number[data-value="0"] {
-	background-image: url(/assets/svg/status-panel/numbers/number0.svg);
+	background-image: url(./assets/svg/status-panel/numbers/number0.svg);
 }
 .statusbar__number[data-value="1"] {
-	background-image: url(/assets/svg/status-panel/numbers/number1.svg);
+	background-image: url(./assets/svg/status-panel/numbers/number1.svg);
 }
 .statusbar__number[data-value="2"] {
-	background-image: url(/assets/svg/status-panel/numbers/number2.svg);
+	background-image: url(./assets/svg/status-panel/numbers/number2.svg);
 }
 .statusbar__number[data-value="3"] {
-	background-image: url(/assets/svg/status-panel/numbers/number3.svg);
+	background-image: url(./assets/svg/status-panel/numbers/number3.svg);
 }
 .statusbar__number[data-value="4"] {
-	background-image: url(/assets/svg/status-panel/numbers/number4.svg);
+	background-image: url(./assets/svg/status-panel/numbers/number4.svg);
 }
 .statusbar__number[data-value="5"] {
-	background-image: url(/assets/svg/status-panel/numbers/number5.svg);
+	background-image: url(./assets/svg/status-panel/numbers/number5.svg);
 }
 .statusbar__number[data-value="6"] {
-	background-image: url(/assets/svg/status-panel/numbers/number6.svg);
+	background-image: url(./assets/svg/status-panel/numbers/number6.svg);
 }
 .statusbar__number[data-value="7"] {
-	background-image: url(/assets/svg/status-panel/numbers/number7.svg);
+	background-image: url(./assets/svg/status-panel/numbers/number7.svg);
 }
 .statusbar__number[data-value="8"] {
-	background-image: url(/assets/svg/status-panel/numbers/number8.svg);
+	background-image: url(./assets/svg/status-panel/numbers/number8.svg);
 }
 .statusbar__number[data-value="9"] {
-	background-image: url(/assets/svg/status-panel/numbers/number9.svg);
+	background-image: url(./assets/svg/status-panel/numbers/number9.svg);
 }
 
 .statusbar__time,
