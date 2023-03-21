@@ -228,6 +228,14 @@ body {
 	box-shadow: inset -6px -6px 0px #F0F0F0, inset 6px 6px 0px #7E7E7E;
 }
 
+.square {
+	width: 10px;
+	height: 30px;
+	background: red;
+	position: absolute;
+	z-index: -1;
+}
+
 .d1 {
 	width: 100px; 
 	height: 100px;

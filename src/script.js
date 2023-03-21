@@ -1,6 +1,5 @@
 //@ts-check
 
-
 /**
  * @typedef GameGlobals
  * @property {number} minesLeft
@@ -44,17 +43,17 @@ const gameDifficults = {
         panelSizeX: 354, //354 -44
         panelSizeY: 537, //317 -183
       },
-      medium: {
+    medium: {
         fieldWidth: 16,
         fieldHeight: 16,
         minesNumber: 40,
         panelSizeX: 620, //620
         panelSizeY: 803, //657
       },
-      hard: {
+    hard: {
         fieldWidth: 16,
         fieldHeight: 30,
-        minesNumber: 99,
+        minesNumber: 1,
         panelSizeX: 1154, //1154
         panelSizeY: 803, //657
       },
@@ -115,30 +114,58 @@ function randomInteger(min, max) {
  */
 function openGroupDefaultCells (xpos, ypos) {
     if (xpos-1 >= 0) {
-        if (gameGlobals.gameArray[xpos-1][ypos] == 0) {
+        if (gameGlobals.gameArray[xpos-1][ypos] === 0) {
             gameGlobals.gameArray[xpos-1][ypos] = '-';
             openGroupDefaultCells(xpos-1, ypos);
         }
     }
     
     if (xpos+1 < gameGlobals.widthArray) {
-        if (gameGlobals.gameArray[xpos+1][ypos] == 0) {
+        if (gameGlobals.gameArray[xpos+1][ypos] === 0) {
             gameGlobals.gameArray[xpos+1][ypos] = '-';
             openGroupDefaultCells(xpos+1, ypos);
         }
     }
 
     if (ypos-1 >= 0) {
-        if (gameGlobals.gameArray[xpos][ypos-1] == 0) {
+        if (gameGlobals.gameArray[xpos][ypos-1] === 0) {
             gameGlobals.gameArray[xpos][ypos-1] = '-';
             openGroupDefaultCells(xpos, ypos-1);
         }
     }
 
     if (ypos+1 < gameGlobals.heightArray) {
-        if (gameGlobals.gameArray[xpos][ypos+1] == 0) {
+        if (gameGlobals.gameArray[xpos][ypos+1] === 0) {
             gameGlobals.gameArray[xpos][ypos+1] = '-';
             openGroupDefaultCells(xpos, ypos+1);
+        }
+    }
+
+
+    if ((xpos-1 >= 0) && (ypos-1 >= 0)) {
+        if (gameGlobals.gameArray[xpos-1][ypos-1] === 0) {
+            gameGlobals.gameArray[xpos-1][ypos-1] = '-';
+            openGroupDefaultCells(xpos-1, ypos-1);
+        }
+    }
+
+    if ((xpos-1 >= 0) && (ypos+1 < gameGlobals.heightArray)) {
+        if (gameGlobals.gameArray[xpos-1][ypos+1] === 0) {
+            gameGlobals.gameArray[xpos-1][ypos+1] = '-';
+            openGroupDefaultCells(xpos-1, ypos+1);
+        }
+    }
+    if ((xpos+1 < gameGlobals.widthArray) && (ypos-1 >= 0)) {
+        if (gameGlobals.gameArray[xpos+1][ypos-1] === 0) {
+            gameGlobals.gameArray[xpos+1][ypos-1] = '-';
+            openGroupDefaultCells(xpos+1, ypos-1);
+        }
+    }
+
+    if ((xpos+1 < gameGlobals.widthArray) && (ypos+1 < gameGlobals.heightArray)) {
+        if (gameGlobals.gameArray[xpos+1][ypos+1] === 0) {
+            gameGlobals.gameArray[xpos+1][ypos+1] = '-';
+            openGroupDefaultCells(xpos+1, ypos+1);
         }
     }
 };
@@ -163,7 +190,7 @@ function replaceMineView (x, y) {
 function refreshMineField (arr, width, height) {
     for (let i=0; i<width; i++) {
         for (let j=0; j<height; j++) {
-            if (arr[i][j] == '-') {
+            if (arr[i][j] === '-') {
 
                 replaceMineView(i, j);
 
@@ -236,6 +263,7 @@ function isGameWin () {
         gameGlobals.isOver = true;
         gameGlobals.gameStatus = false;
        clearInterval(intervalTime);
+       fireWork();
     }
 };
 
@@ -257,16 +285,16 @@ function endGame () {
             let dataValue = cell.getAttribute('data-image');
 
             if (dataValue !== 'question') {
-                if ((cell.classList[0] == 'minefield__cell-closed') && (gameGlobals.gameArray[i][j] == 'x') && (dataValue != 'flag')) {
+                if ((cell.classList[0] === 'minefield__cell-closed') && (gameGlobals.gameArray[i][j] === 'x') && (dataValue != 'flag')) {
                     cell.classList.replace('minefield__cell-closed', 'minefield__cell-open');
                     cell.setAttribute('data-image', 'mine');
                 }
 
-                if ((dataValue == 'flag') && (gameGlobals.gameArray[i][j] != 'x')) {
+                if ((dataValue === 'flag') && (gameGlobals.gameArray[i][j] != 'x')) {
                     cell.setAttribute('data-image', 'minex');
                 }
 
-                if ((cell.classList[0] == 'minefield__cell-closed') && (dataValue == 'none')) {
+                if ((cell.classList[0] === 'minefield__cell-closed') && (dataValue === 'none')) {
                     cell.classList.replace('minefield__cell-closed', 'minefield__cell-open');
                     cell.setAttribute('data-image', openCells(i, j));
                 }
@@ -327,11 +355,13 @@ minefield.onclick = function(event) {
     let idCell
     let dataValue
 
-    if ((target.tagName == 'SPAN') && (gameGlobals.isOver == false) && (target.getAttribute("data-image") == 'none')) {
-        if (gameGlobals.gameStatus == false) {
+    if ((target.tagName === 'SPAN') && (gameGlobals.isOver === false) && (target.getAttribute("data-image") === 'none')) {
+        if (gameGlobals.gameStatus === false) {
             idCell = target.id.split('-').map(Number);
             gameGlobals.gameArray = createArray(gameGlobals.gameArray, idCell[0], idCell[1], gameGlobals.widthArray, gameGlobals.heightArray, gameGlobals.minesNumber);
             gameGlobals.gameStatus = true;
+            gameGlobals.timeSec = 1;
+            refreshStatusNumbers(true);
             intervalTime = setInterval(timer, 1000);
         }
 
@@ -343,7 +373,7 @@ minefield.onclick = function(event) {
         isGameWin();
 
         idCell = idCell.map(Number);
-        if (dataValue == 'none') {
+        if (dataValue === 'none') {
             gameGlobals.gameArray[idCell[0]][idCell[1]] = '-';
             openGroupDefaultCells(idCell[0], idCell[1]);
             refreshMineField(gameGlobals.gameArray, gameGlobals.widthArray, gameGlobals.heightArray);
@@ -351,7 +381,7 @@ minefield.onclick = function(event) {
 
         printArray(gameGlobals.gameArray, gameGlobals.widthArray, gameGlobals.heightArray);
 
-        if (dataValue == 'mine') {
+        if (dataValue === 'mine') {
             target.classList.replace('minefield__cell-open', 'minefield__cell-boom');
             endGame();
         }
@@ -371,7 +401,7 @@ minefield.oncontextmenu = function(event) {
         return
     }
 
-    if ((target.tagName == 'SPAN') && (gameGlobals.isOver == false) && (target.classList[0] === 'minefield__cell-closed')) {
+    if ((target.tagName === 'SPAN') && (gameGlobals.isOver === false) && (target.classList[0] === 'minefield__cell-closed')) {
         switch (target.getAttribute('data-image')) {  
             case 'question':
                 target.setAttribute("data-image", "none");
@@ -402,7 +432,7 @@ function refreshStatusNumbers (flagStatus) {
         secTenths.setAttribute("data-value", numbersClasses[1]);
         secHundredths.setAttribute("data-value", numbersClasses[2]);
     }
-    if ((gameGlobals.minesLeft >=0) && (flagStatus == false)){
+    if ((gameGlobals.minesLeft >=0) && (flagStatus === false)){
         let numbersClasses = numberDivide(gameGlobals.minesLeft);
         mineUnits.setAttribute("data-value", numbersClasses[0]);
         mineTenths.setAttribute("data-value", numbersClasses[1]);
@@ -477,6 +507,8 @@ function startGame () {
     gameGlobals.timeSec = 0;
 
     refreshStatusNumbers(true);
+
+    deleteFireWorks();
 
     switch (gameGlobals.currentDifficult) {
         case 'easy':
@@ -591,7 +623,7 @@ function createArray (arr, startPositionX, startPositionY, width, height, minesC
     while (minesCount != 0) {
         let x = randomInteger(0, width-1);
         let y = randomInteger(0, height-1);
-        if ((arr[x][y] == 0) && (x != startPositionX) && (y != startPositionY) /*&& (x != startPositionX - 1) && (x != startPositionX + 1) && (y != startPositionY - 1) && (y != startPositionY + 1)*/) {
+        if ((arr[x][y] === 0) && (x != startPositionX) && (y != startPositionY) /*&& (x != startPositionX - 1) && (x != startPositionX + 1) && (y != startPositionY - 1) && (y != startPositionY + 1)*/) {
             arr[x][y] = 'x';
             minesCount = minesCount - 1;
         }
@@ -600,44 +632,44 @@ function createArray (arr, startPositionX, startPositionY, width, height, minesC
     let count_mines = 0
     for (let i=0; i<width; i++) {
         for (let j=0; j<height; j++) {
-            if (arr[i][j] == 0) {
+            if (arr[i][j] === 0) {
                 if ((i-1 >=0) && (j-1 >=0)) {
-                    if (arr[i-1][j-1] == 'x') {
+                    if (arr[i-1][j-1] === 'x') {
                         count_mines += 1;
                     }
                 }
                 if (i-1 >=0) {
-                    if (arr[i-1][j] == 'x') {
+                    if (arr[i-1][j] === 'x') {
                         count_mines += 1;
                     }
                 }
                 if ((i-1 >=0) && (j+1 < height)) {
-                    if (arr[i-1][j+1] == 'x') {
+                    if (arr[i-1][j+1] === 'x') {
                         count_mines += 1;
                     }
                 }
                 if (j-1 >= 0) {
-                    if (arr[i][j-1] == 'x') {
+                    if (arr[i][j-1] === 'x') {
                         count_mines += 1;
                     }
                 }
                 if (j+1 < height) {
-                    if (arr[i][j+1] == 'x') {
+                    if (arr[i][j+1] === 'x') {
                         count_mines += 1;
                     }
                 }
                 if ((i+1 < width) && (j - 1 >= 0)) {
-                    if (arr[i+1][j-1] == 'x') {
+                    if (arr[i+1][j-1] === 'x') {
                         count_mines += 1;
                     }
                 }    
                 if (i+1 < width) {
-                    if (arr[i+1][j] == 'x') {
+                    if (arr[i+1][j] === 'x') {
                         count_mines += 1;
                     }
                 }
                 if ((i+1 < width)  && (j + 1 < height)) {
-                    if (arr[i+1][j + 1] == 'x') {
+                    if (arr[i+1][j + 1] === 'x') {
                         count_mines += 1;
                     }
                 }
@@ -687,36 +719,50 @@ function pidor (target, y, ymax) {
 changeDifficult (gameGlobals.currentDifficult);
 startGame();
 
-// setInterval(function(){
-//     let position = 0;
-//     const potolok = randomInteger(0, 1000);
-// 	let span = document.createElement('span');
-//     span.className = 'd1';
-//     span.style.top = position + 'px';
-//     span.style.left = potolok + 'px';
-//     span.style.backgroundColor = '#' + (Math.random().toString(16) + '000000').substring(2,8).toUpperCase();
-//     const intervalId = setInterval(() => {
-//         if (position < potolok) {
-//             position += 5;
-//             span.style.top = position + 'px';   
-//             console.log(position);
-//         } else {
-//             document.body.removeChild(span);
-//             clearInterval(intervalId);
-//         }
-        
-//     }, 100);
-//     //pidor(span, 0, randomInteger(700, 1000));
-//     document.body.appendChild(span);
+/**
+ * Make salut when win
+ */
+function fireWork () {
+    for (let i = 0; i < 10; i ++) {
+        setTimeout(() => {
+            const potolok = randomInteger(100, 300);
+            let position = 1500;
+            let left = randomInteger(0, 1000);
 
-// }, randomInteger(100, 1000))
+            let span = document.createElement('span');
+            span.className = 'square';
+            span.style.left = left + 'px';
+            span.style.top = '1500px';
+            document.body.appendChild(span);
+            const intervalId = setInterval(() => {
+                if (gameGlobals.isOver === false) {
+                    clearInterval(intervalId);     
+                }
+                if (position > potolok) {
+                    position -= 5;
+                    span.style.top = position + 'px';   
+                } else {
+                    document.body.removeChild(span);
+                    clearInterval(intervalId);
+                    for (let i = 0; i < 10; i ++) {
+                        setTimeout(() => {
+                            let span = document.createElement('span');
+                            span.className = 'd1';
+                            span.style.top = (position+randomInteger(-200,200)) + 'px';
+                            span.style.left = (left+randomInteger(-200,200)) + 'px';
+                            span.style.backgroundColor = '#' + (Math.random().toString(16) + '000000').substring(2,8).toUpperCase();
+                            document.body.appendChild(span);
+                        }, randomInteger(500, 1000));
+                    }
+                }
+            }, 10);
+        }, randomInteger(100, 1000));
 
-// for (let i = 0; i < 10; i++) {
-//     let span = document.createElement('span');
-//     span.className = 'd1';
-//     span.style.top = String(0)+'px';
-//     span.style.left = String(randomInteger(0, 1000))+'px';
-//     span.style.backgroundColor = '#' + (Math.random().toString(16) + '000000').substring(2,8).toUpperCase();
-//     pidor(span, 0, randomInteger(700, 1000));
-//     document.body.appendChild(span);
-// }
+    }
+};
+
+function deleteFireWorks () {
+    const elementList = document.querySelectorAll('.d1, .square');
+    console.log(elementList);
+    elementList.forEach(element => document.body.removeChild(element));
+};
