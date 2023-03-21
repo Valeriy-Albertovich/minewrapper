@@ -679,13 +679,13 @@ function createArray (arr, startPositionX, startPositionY, width, height, minesC
         }
     }
 
-    let pizda = '';
+    let str = '';
     for (let i=0; i<width; i++) {
-        pizda = '';
+        str = '';
         for (let j=0; j<height; j++) {
-            pizda = pizda + ' ' + arr[i][j];
+            str = str + ' ' + arr[i][j];
         }
-    console.log(pizda + '\n');
+    console.log(str + '\n');
     }   
 
     return arr;
@@ -693,28 +693,15 @@ function createArray (arr, startPositionX, startPositionY, width, height, minesC
 
 function printArray (arr, width, height) {
     console.log('\n');
-    let pizda = '';
+    let str = '';
     for (let i=0; i<width; i++) {
-        pizda = '';
+        str = '';
         for (let j=0; j<height; j++) {
-            pizda = pizda + ' ' + arr[i][j];
+            str = str + ' ' + arr[i][j];
         }
-    console.log(pizda + '\n');
+    console.log(str + '\n');
     }   
 };
-
-
-function pidor (target, y, ymax) {
-    if (y < ymax) {
-        target.style.top =  String(y)+'px';
-        y ++;
-
-        pidor(target, y, ymax);
-    } else {
-        //document.body.removeChild(target);
-        return;
-    }
-}
 
 changeDifficult (gameGlobals.currentDifficult);
 startGame();
