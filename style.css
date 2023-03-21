@@ -52,37 +52,37 @@ body {
 }
 
 [data-image="question"] {
-	background-image: url(./assets/svg/status-panel/mines/New/question.svg);
+	background-image: url(./assets/svg/status-panel/mines/question.svg);
 }
 [data-image="flag"] {
-	background-image: url(./assets/svg/status-panel/mines/New/flag.svg);
+	background-image: url(./assets/svg/status-panel/mines/flag.svg);
 }
 [data-image="minex"] {
-	background-image: url(./assets/svg/status-panel/mines/New/mine-x.svg);
+	background-image: url(./assets/svg/status-panel/mines/mine-x.svg);
 }
 [data-image="mine"] {
-	background-image: url(./assets/svg/status-panel/mines/New/mine.svg);
+	background-image: url(./assets/svg/status-panel/mines/mine.svg);
 }
 [data-image="number1"] {
-	background-image: url(./assets/svg/status-panel/mines/New/1.svg);
+	background-image: url(./assets/svg/status-panel/mines/1.svg);
 }
 [data-image="number2"] {
-	background-image: url(./assets/svg/status-panel/mines/New/2.svg);
+	background-image: url(./assets/svg/status-panel/mines/2.svg);
 }
 [data-image="number3"] {
-	background-image: url(./assets/svg/status-panel/mines/New/3.svg);
+	background-image: url(./assets/svg/status-panel/mines/3.svg);
 }
 [data-image="number4"] {
-	background-image: url(./assets/svg/status-panel/mines/New/4.svg);
+	background-image: url(./assets/svg/status-panel/mines/4.svg);
 }
 [data-image="number5"] {
-	background-image: url(./assets/svg/status-panel/mines/New/5.svg);
+	background-image: url(./assets/svg/status-panel/mines/5.svg);
 }
 [data-image="number6"] {
-	background-image: url(./assets/svg/status-panel/mines/New/6.svg);
+	background-image: url(./assets/svg/status-panel/mines/6.svg);
 }
 [data-image="number7"] {
-	background-image: url(./assets/svg/status-panel/mines/New/7.svg);
+	background-image: url(./assets/svg/status-panel/mines/7.svg);
 }
 
 .statusbar {
